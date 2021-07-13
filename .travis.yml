@@ -1,0 +1,27 @@
+sudo: required
+
+language: python
+dist: xenial
+
+python:
+  - "3.7"
+
+services:
+  - docker
+
+before_script:
+  - pip install docker-compose
+
+script:
+  - docker-compose -f dev.yml run web python manage.py test
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: pytest -x
+    on:
+      branch: master
+
+branches:
+  - master
+  - develop
